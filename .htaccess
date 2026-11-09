@@ -1,0 +1,5 @@
+# Výchozí kódování UTF-8 pro textové dokumenty
+AddDefaultCharset UTF-8
+
+# Explicitní UTF-8 pro vybrané typy souborů
+AddCharset UTF-8 .html .htm .css .js .mjs .json .xml .txt .md .svg

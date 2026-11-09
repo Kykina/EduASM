@@ -1,0 +1,301 @@
+@charset "UTF-8";
+:root{
+  --bg:#ffffff;
+  --ink:#0f172a;
+  --muted:#64748b;
+  --card:#f7f8fb;
+  --line:#e5e7eb;
+  --line2:#d1d5db;
+  --shadow: 0 1px 2px rgba(0,0,0,.06), 0 10px 22px rgba(0,0,0,.06);
+  --r:14px;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
+}
+
+*{ box-sizing:border-box; }
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--mono);
+}
+
+.topbar{
+  padding:14px 16px 10px;
+  border-bottom:1px solid var(--line);
+  background: linear-gradient(#fff, #fbfbfd);
+}
+.topbar h1{
+  margin:0;
+  font-size:22px;
+  letter-spacing:.2px;
+}
+.sub{
+  margin:6px 0 0;
+  color:var(--muted);
+  font-family:var(--sans);
+  font-size:13px;
+}
+
+.layout{
+  display:flex;
+  gap:16px;
+  padding:14px 16px 18px;
+  align-items:flex-start;
+}
+
+.workspace{ flex: 0 0 auto; }
+.blockly{
+  width: 800px;
+  height: 680px;
+  border-radius: var(--r);
+  overflow:hidden;
+  border:1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+.side{
+  width: 860px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.panel{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:var(--r);
+  box-shadow: var(--shadow);
+  overflow:hidden;
+}
+.panel-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  padding:10px 12px;
+  border-bottom:1px solid var(--line);
+  background:linear-gradient(#fff,#fafbfe);
+}
+.panel-title{
+  font-weight:800;
+  letter-spacing:.2px;
+}
+.panel-meta{
+  color:var(--muted);
+  font-family:var(--sans);
+  font-size:12px;
+}
+
+.controls{
+  display:flex;
+  gap:10px;
+  padding:10px 12px 12px;
+  flex-wrap:wrap;
+}
+button{
+  font-family:var(--mono);
+  font-size:14px;
+  padding:8px 12px;
+  border-radius:12px;
+  border:1px solid var(--line2);
+  background:#fff;
+  cursor:pointer;
+}
+button:hover{ background:#f8fafc; }
+
+.code{
+  margin:0;
+  padding:10px 12px 12px;
+  background:#fff;
+  border-top:1px solid var(--line);
+  overflow:auto;
+  max-height:220px;
+  border-bottom-left-radius: var(--r);
+  border-bottom-right-radius: var(--r);
+}
+
+.trace{
+  padding:10px 12px 12px;
+  background:#fff;
+  border-top:1px solid var(--line);
+  overflow:auto;
+  max-height:220px;
+}
+.trace .row{
+  white-space:pre;
+  padding:2px 6px;
+  border-radius:10px;
+}
+.trace .active{ background:#d6f0ff; }
+
+/* ========= REGISTRY SHEET (pretty + readable) ========= */
+
+.regSheetWrap{
+  display:grid;
+  gap:12px;
+  padding:2px 2px 2px;
+}
+
+.regCard{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:var(--r);
+  overflow:hidden;
+}
+
+.regCardHead{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  padding:5px 12px;
+  border-bottom:1px solid var(--line);
+}
+.regCardHead .name{
+  font-weight:900;
+  font-size:14px;
+}
+.regCardHead .chips{
+  color:var(--muted);
+  font-family:var(--sans);
+  font-size:12px;
+}
+
+table.reg{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  table-layout:fixed;
+  font-size:12px;
+}
+
+/* každý bajtový sloupec dostane stejnou šířku */
+table.reg col.byte { width: 60px; }   /* klidně 74–86 podle potřeby */
+table.reg col.lab  { width: 90px; }
+
+table.reg th, table.reg td{
+  border-right:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  padding:2px 2px;
+  text-align:center;
+  vertical-align:middle;
+}
+
+table.reg tr:first-child th,
+table.reg tr:first-child td{
+  border-top:1px solid var(--line);
+}
+table.reg th:first-child, table.reg td:first-child{
+  border-left:1px solid var(--line);
+}
+
+td.lab{
+  width: 140px;
+  text-align:left;
+  font-weight:900;
+  background:#fff;
+}
+
+th.grp{
+  font-weight:900;
+  background:#f3f6ff; /* jemné, ne “modrá vana” */
+  letter-spacing:.3px;
+}
+th.grp2{
+  font-weight:900;
+  background:#f6f7f9;
+}
+
+td.bin{
+  font-size:10px;
+  letter-spacing:0.4px;
+  padding: 8px 6px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+td.hex{
+  font-size:14px;
+  font-weight:900;
+  letter-spacing:0.6px;
+  padding: 8px 6px;
+  font-variant-numeric: tabular-nums;
+}
+
+th.grp, th.grp2{
+  font-size: 12px;
+  padding: 10px 8px;
+}
+
+/* Oddělovač po 4 bajtech – jemný ale viditelný */
+.sep4{ border-right:2px solid var(--line2) !important; }
+
+/* DEC řádek – nové styly */
+td.decCell{
+  text-align: left;
+  background: #fff;
+  padding: 10px 10px;
+}
+.decGrid{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap: 10px;
+}
+.decGrid .k{
+  font-weight: 900;
+  color: var(--ink);
+}
+.decGrid .v{
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+td.decK{
+  text-align:left;
+  font-weight:900;
+  background:#fff;
+}
+td.decV{
+  text-align:left;
+  font-weight:800;
+  background:#fff;
+  font-variant-numeric: tabular-nums;
+}
+
+/* jemný oddělovač po 4 bajtech (mezi byte3 a byte4) */
+.sep4{ border-right:2px solid var(--line2) !important; }
+.sep4L{ border-left:2px solid var(--line2) !important; }
+
+.regNote{
+  padding:10px 12px 12px;
+  color:var(--muted);
+  font-family:var(--sans);
+  font-size:12px;
+}
+
+
+.target-select-row{
+  display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+  padding:12px; font-family:var(--sans); font-size:13px;
+}
+.target-select-row label{font-weight:700}
+.target-select-row select{
+  font:inherit; padding:8px 10px; border:1px solid var(--line2);
+  border-radius:10px; background:#fff; color:var(--ink); min-width:250px;
+}
+.target-info{
+  padding:0 12px 12px; color:var(--muted);
+  font:12px/1.5 var(--sans);
+}
+
+
+.asm-editor{
+  display:block; width:100%; min-height:190px; resize:vertical;
+  box-sizing:border-box; white-space:pre; overflow:auto;
+  font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
+  line-height:1.5; tab-size:4;
+}
+.asm-actions{
+  display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+  padding:0 12px 12px;
+}
+.asm-status{font:12px/1.4 var(--sans);color:var(--muted)}

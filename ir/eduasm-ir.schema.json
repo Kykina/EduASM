@@ -1,0 +1,260 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:eduasm:ir:schema:1.0.0",
+  "title": "EduASM-IR Program",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "ir",
+    "version",
+    "wordSize",
+    "functions"
+  ],
+  "properties": {
+    "ir": {
+      "const": "EduASM-IR"
+    },
+    "version": {
+      "const": "1.0.0"
+    },
+    "wordSize": {
+      "const": 64
+    },
+    "metadata": {
+      "type": "object"
+    },
+    "functions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/function"
+      }
+    }
+  },
+  "$defs": {
+    "operand": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "id",
+            "base",
+            "alias",
+            "width",
+            "offset"
+          ],
+          "properties": {
+            "type": {
+              "const": "register"
+            },
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "base": {
+              "type": "string",
+              "minLength": 1
+            },
+            "alias": {
+              "type": "string",
+              "minLength": 1
+            },
+            "width": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "offset": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value",
+            "width"
+          ],
+          "properties": {
+            "type": {
+              "const": "value"
+            },
+            "value": {
+              "type": "string",
+              "pattern": "^-?(0x[0-9a-fA-F]+|[0-9]+)$"
+            },
+            "width": {
+              "enum": [
+                8,
+                16,
+                32,
+                64
+              ]
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "name"
+          ],
+          "properties": {
+            "type": {
+              "const": "label"
+            },
+            "name": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "name"
+          ],
+          "properties": {
+            "type": {
+              "const": "predicate"
+            },
+            "name": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "instruction": {
+      "type": "object",
+      "required": [
+        "op"
+      ],
+      "properties": {
+        "op": {
+          "enum": [
+            "move",
+            "binary",
+            "unary",
+            "cast",
+            "compare",
+            "test",
+            "label",
+            "jump",
+            "branch",
+            "nop"
+          ]
+        },
+        "dst": {
+          "$ref": "#/$defs/operand"
+        },
+        "src": {
+          "$ref": "#/$defs/operand"
+        },
+        "left": {
+          "$ref": "#/$defs/operand"
+        },
+        "right": {
+          "$ref": "#/$defs/operand"
+        },
+        "source": {
+          "$ref": "#/$defs/operand"
+        },
+        "operator": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "sourceWidth": {
+          "type": "integer",
+          "enum": [
+            8,
+            16,
+            32,
+            64
+          ]
+        },
+        "condition": {
+          "type": "string"
+        },
+        "result": {
+          "$ref": "#/$defs/operand"
+        },
+        "target": {
+          "type": "string"
+        },
+        "trueTarget": {
+          "type": "string"
+        },
+        "falseTarget": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "name": {
+          "type": "string"
+        },
+        "mnemonic": {
+          "type": "string"
+        }
+      }
+    },
+    "block": {
+      "type": "object",
+      "required": [
+        "id",
+        "label",
+        "instructions",
+        "terminator"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "instructions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/instruction"
+          }
+        },
+        "terminator": {
+          "type": "object"
+        }
+      }
+    },
+    "function": {
+      "type": "object",
+      "required": [
+        "name",
+        "entry",
+        "blocks"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "entry": {
+          "type": "string"
+        },
+        "blocks": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/block"
+          }
+        }
+      }
+    }
+  }
+}

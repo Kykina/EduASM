@@ -1,0 +1,63 @@
+{
+  "ir": "EduASM-IR",
+  "version": "1.0.0",
+  "wordSize": 64,
+  "functions": [
+    {
+      "name": "main",
+      "entry": "entry",
+      "blocks": [
+        {
+          "id": "entry",
+          "label": "entry",
+          "instructions": [
+            {
+              "op": "move",
+              "dst": {
+                "type": "register",
+                "id": "r0",
+                "base": "rax",
+                "alias": "rax",
+                "width": 64,
+                "offset": 0
+              },
+              "src": {
+                "type": "value",
+                "value": "5",
+                "width": 64
+              }
+            },
+            {
+              "op": "binary",
+              "operator": "add",
+              "dst": {
+                "type": "register",
+                "id": "r0",
+                "base": "rax",
+                "alias": "rax",
+                "width": 64,
+                "offset": 0
+              },
+              "left": {
+                "type": "register",
+                "id": "r0",
+                "base": "rax",
+                "alias": "rax",
+                "width": 64,
+                "offset": 0
+              },
+              "right": {
+                "type": "value",
+                "value": "3",
+                "width": 64
+              }
+            }
+          ],
+          "terminator": {
+            "op": "return"
+          }
+        }
+      ]
+    }
+  ]
+}

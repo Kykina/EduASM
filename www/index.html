@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>EduASM – výukové prostředí assembleru</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script src="https://unpkg.com/blockly/blockly.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <h1>EduASM – Blockly demo</h1>
+    <p class="sub">Blockly ↔ EduASM-IR ↔ cílová architektura / assembler + simulace</p>
+  </header>
+  <main class="layout">
+    <section class="workspace">
+      <div id="blocklyDiv" class="blockly"></div>
+    </section>
+    <aside class="side">
+      <section class="panel target-panel">
+        <div class="panel-head">
+          <div class="panel-title">Cílová architektura</div>
+          <div class="panel-meta">stejné EduASM-IR, jiné registry a výstup</div>
+        </div>
+        <div class="target-select-row">
+          <label for="targetSelect">Zobrazit cílový assembler:</label>
+          <select id="targetSelect">
+            <option value="x86-64">x86-64 (NASM)</option>
+            <option value="edu-generic">Obecný EduASM (virtuální ISA)</option>
+          </select>
+        </div>
+        <div id="targetInfo" class="target-info"></div>
+      </section>
+      <section class="panel">
+        <div class="panel-head">
+          <div class="panel-title">Ovládání</div>
+          <div class="panel-meta" id="pcInfo">PC: 0 / 0</div>
+        </div>
+        <div class="controls">
+          <button id="btnReset">Reset</button>
+          <button id="btnStep">Step</button>
+          <button id="btnRun">Run</button>
+          <button id="btnStop">Stop</button>
+        </div>
+      </section>
+      <div id="REG_TABLES"></div>
+      <section class="panel">
+        <div class="panel-head">
+          <div class="panel-title">EduASM-IR</div>
+          <div class="panel-meta">společná mezireprezentace</div>
+        </div>
+        <pre id="irOutput" class="code"></pre>
+      </section>
+      <section class="panel">
+        <div class="panel-head">
+          <div class="panel-title" id="asmTitle">ASM</div>
+          <div class="panel-meta" id="asmMeta">generováno z EduASM-IR</div>
+        </div>
+        <textarea id="output" class="code asm-editor" spellcheck="false" aria-label="Editovatelný assemblerový kód"></textarea>
+        <div class="asm-actions">
+          <button id="btnAsmToBlocks" type="button">ASM → IR → Blockly</button>
+          <span id="asmStatus" class="asm-status">Upravte ASM a převádějte jej zpět do bloků.</span>
+        </div>
+      </section>
+      <section class="panel">
+        <div class="panel-head">
+          <div class="panel-title">Trace</div>
+          <div class="panel-meta">kroky simulátoru</div>
+        </div>
+        <div id="trace" class="trace"></div>
+      </section>
+    </aside>
+  </main>
+  <script type="module" src="./index.js"></script>
+</body>
+</html>

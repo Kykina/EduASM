@@ -1,0 +1,28 @@
+
+import {translateDemoItems} from '../blockly/index.js';
+import {emitDemoX86} from '../ir-to-x86-64/index.js';
+import {emitDemoGeneric,targetInfo as genericTargetInfo} from '../ir-generic/index.js';
+import {parseX86Assembly} from '../x86-64-to-ir/index.js';
+import {parseGenericAssembly} from '../generic-ir/index.js';
+import {DemoInterpreter} from '../ir-interpreter/index.js';
+import {validateProgram} from '../www/ir-runtime.js';
+const items=[{op:'MOV',dst:'rax',src:{kind:'immediate',value:'5'}},{op:'ADD',dst:'rax',src:{kind:'immediate',value:'3'}},{op:'MOV',dst:'rbx',src:{kind:'register',name:'rax'}}];
+const p=translateDemoItems(items,'x86-64');
+if(p.version!=='1.0.0' || p.functions[0].blocks[0].instructions[0].src.type!=='value') throw new Error('IR 1.0.0 operand contract mismatch');
+if(!validateProgram(p).valid) throw new Error('IR validation failed');
+const m=new DemoInterpreter(p);m.run();
+if(m.trace.length!==3 || m.trace[1].registers.r0!==8n) throw new Error('interpreter trace snapshot mismatch');
+if(m.registers.r0!==8n || m.registers.r1!==8n) throw new Error('interpreter result mismatch '+JSON.stringify(Object.fromEntries(Object.entries(m.registers).map(([k,v])=>[k,String(v)]))));
+const asm=emitDemoX86(p);
+const parsed=parseX86Assembly(asm);
+if(parsed.length!==3) throw new Error('x86 parser did not return 3 instructions');
+const pg=translateDemoItems([{op:'MOV',dst:'A',src:{kind:'immediate',value:'5'}},{op:'ADD',dst:'A',src:{kind:'immediate',value:'3'}},{op:'MOV',dst:'B',src:{kind:'register',name:'A'}}],'edu-generic',genericTargetInfo);
+const ga=emitDemoGeneric(pg);
+if(parseGenericAssembly(ga).length!==3) throw new Error('generic parser did not return 3 instructions');
+genericTargetInfo.registers.push({id:'r2',name:'C',base:'C',width:64,offset:0,aliases:['C']});
+const pc=translateDemoItems([{op:'MOV',dst:'C',src:{kind:'immediate',value:'10'}},{op:'ADD',dst:'C',src:{kind:'immediate',value:'2'}}],'edu-generic',genericTargetInfo);
+const mc=new DemoInterpreter(pc,genericTargetInfo);mc.run();
+if(mc.registers.r2!==12n) throw new Error('dynamic register C interpreter result mismatch');
+if(!emitDemoGeneric(pc).includes('MOV C, #10')) throw new Error('generic backend did not emit register C');
+if(parseGenericAssembly(`CODE:\nMOV C, #10`).length!==1) throw new Error('generic parser did not accept register C');
+console.log('smoke OK', asm.split('\n').filter(x=>/mov |add |sub /i.test(x)).length, parseGenericAssembly(ga).length);
